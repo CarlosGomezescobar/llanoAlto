@@ -5,12 +5,13 @@ import { loadQAStuffChain } from 'langchain/chains'
 import { Document } from 'langchain/document'
 import { timeout } from './config'
 import { fetch } from 'cross-fetch'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from './lib/supabaseClient'
+import { PineconeClient } from '@pinecone-database/pinecone'
 //Nader's code - check out his full video in the comments
 export const queryPineconeVectorStoreAndQueryLLM = async (
-  client,
-  indexName,
-  question
+  client: any,
+  indexName: string,
+ question: string
 ) => {
   // 1. Start query process
   console.log(`Querying Pinecone vector store...${question}`);
@@ -36,7 +37,7 @@ export const queryPineconeVectorStoreAndQueryLLM = async (
 
     // 8. Extract and concatenate page content from matched documents
     const concatenatedPageContent = queryResponse.matches
-      .map((match) => match.metadata.pageContent)
+      .map((match: { metadata: { pageContent: any } }) => match.metadata.pageContent)
       .join(" ");
     // 9. Execute the chain with input documents and question
 
@@ -49,9 +50,9 @@ export const queryPineconeVectorStoreAndQueryLLM = async (
   }
 };
 export const createPineconeIndex = async (
-  client,
-  indexName,
-  vectorDimension
+  client: any,
+  indexName: string,
+ vectorDimension: number
 ) => {
   // 1. Initiate index existence check
   console.log(`Checking "${indexName}"...`);
@@ -79,7 +80,10 @@ export const createPineconeIndex = async (
   }
 };
 
-export const updatePinecone = async (client, indexName, docs) => {
+export const updatePinecone = async (
+  client: any, 
+  indexName: string,
+  docs: Document[]) => {
   console.log('Retrieving Pinecone index...');
   // 1. Retrieve Pinecone index
   const index = client.Index(indexName);
@@ -142,5 +146,4 @@ export const updatePinecone = async (client, indexName, docs) => {
     }
   }
 };
-
 
