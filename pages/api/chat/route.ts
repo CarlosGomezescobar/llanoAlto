@@ -1,7 +1,7 @@
 // ./app/api/chat/route.ts
 import { Configuration, OpenAIApi } from 'openai-edge'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
-import { supabase } from "@/lib/supabaseClient"
+import { supabase } from '../../../lib/supabaseClient'
 import { PineconeClient } from '@pinecone-database/pinecone'
 import {
   queryPineconeVectorStoreAndQueryLLM,
